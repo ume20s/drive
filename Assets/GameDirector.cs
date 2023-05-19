@@ -8,12 +8,15 @@ public class GameDirector : MonoBehaviour
     GameObject cat;
     GameObject pointer;
 
+    // アニメーター
+    Animator animator;
+
     // ネコスプライト
     public Sprite[] spriteCat = new Sprite[4];
 
-    private int meterAngle;                         // メーター角度
-    private int tapAngle;                           // タップ角度
-
+    // メーター角度
+    private int meterAngle;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -21,31 +24,61 @@ public class GameDirector : MonoBehaviour
         cat = GameObject.Find("cat");
         pointer = GameObject.Find("pointerpivot");
 
+        // アニメーターコンポーネントの取得
+        animator = cat.GetComponent<Animator>();
+
         // メーター角度の初期化
         meterAngle = 0;
+        setMeter(meterAngle);
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector2 pivot = new Vector2(3.004f, -0.314f);
-        Vector2 target;
+        int tapAngle;                           // タップ角度
 
+        Vector2 pivot = new Vector2(3.004f, -0.314f);   // メーター軸
+        Vector2 target;                                 // タップした位置
+
+        // タップされていたらもろもろ処理
         if (Input.GetMouseButton(0))
         {
-
+            // タップ位置からメーター角度を取得
             target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             tapAngle = getAngle(pivot, target);
 
-            Debug.Log(tapAngle + "," + meterAngle);
-
-            if(tapAngle > 0 && tapAngle <235)
+            // メーター範囲内がタップされていたらメーター移動
+            if (tapAngle > 0 && tapAngle < 235)
             {
                 if (tapAngle > meterAngle) meterAngle++;
                 if (tapAngle < meterAngle) meterAngle--;
             }
-
             setMeter(meterAngle);
+
+            // メーター角度によりアニメ遷移
+            if (meterAngle <= 10)
+            {
+                animator.SetTrigger("to0");
+
+            }
+            else if (meterAngle > 10 && meterAngle <= 50)
+            {
+                animator.SetTrigger("to1");
+            }
+            else if (meterAngle > 50 && meterAngle <= 130)
+            {
+                animator.SetTrigger("to2");
+            }
+            else if (meterAngle > 130 && meterAngle <= 210)
+            {
+                animator.SetTrigger("to3");
+            }
+            else
+            {
+                animator.SetTrigger("to4");
+            }
+            // Debug.Log(tapAngle + "," + meterAngle);
+
         }
     }
 
