@@ -61,15 +61,15 @@ public class GameDirector : MonoBehaviour
                 animator.SetTrigger("to0");
 
             }
-            else if (meterAngle > 10 && meterAngle <= 50)
+            else if (meterAngle <= 50)
             {
                 animator.SetTrigger("to1");
             }
-            else if (meterAngle > 50 && meterAngle <= 130)
+            else if (meterAngle <= 130)
             {
                 animator.SetTrigger("to2");
             }
-            else if (meterAngle > 130 && meterAngle <= 210)
+            else if (meterAngle <= 210)
             {
                 animator.SetTrigger("to3");
             }
